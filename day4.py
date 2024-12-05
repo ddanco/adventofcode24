@@ -1,66 +1,44 @@
 from itertools import chain
-from typing import List
+from typing import List, Tuple
 
+
+##############
+### Part 1 ###
+##############
 
 def line_count(line: str) -> int:
 	count = 0
 	for i in range(len(line) - 3):
-		if line[i:i+4] == 'XMAS':
+		if 'XMAS' in (line[i:i+4], line[i:i+4][::-1]):
 			count += 1
 	return count
 
-def get_xmas_count(input: str) -> List[List[str]]:
+def get_diagonals(rows: List[str]) -> List[str]:
+	levels: Tuple[str, ...] = tuple()
+	for row in range(len(rows)*2):
+		level: List[str] = []
+		for c in range(row + 1):
+			if row-c < len(rows) and c < len(rows[row-c]):
+				level += rows[row-c][c]
+		levels += (''.join(level),)
+
+	return list(levels)
+
+def get_xmas_count(input: str) -> int:
 	rows = input.split('\n')
 	columns = [''.join(row[i] for row in rows) for i in range(len(rows[0]))]
 
+	diagonals_ltr_up = get_diagonals(rows)
+	# Reverse all strings to get the other diagonals
+	diagonals_ltr_down = get_diagonals([string[::-1] for string in rows])
 
-	def get_diagonals() -> List[str]:
-		levels = tuple()
-		# for row in range(len(rows)):
-		# 	level = []
-		# 	for c in range(row + 1):
-		# 		level += rows[row-c][c]
-		# 	levels += (''.join(level),)
+	return sum(line_count(line)
+			for line in chain(rows, columns, diagonals_ltr_up, diagonals_ltr_down))
 
-		rows_range = range(len(rows)-1, 0, -1)
-		for i, row in enumerate(rows_range):
-			level = []
-			for c in range(len(rows), len(rows)-i):
-			# for c in range(len(rows)-i-1, -1, -1):
-				level += rows[row-c][c]
-			levels += (''.join(level),)
-
-	get_diagonals()
-	return sum(line_count(line) for line in chain(rows, columns))
-
-	# 0: 00
-	# 1: 01 10
-	# 2: 02 11 20
-	# 3: 03 12 21 30
-	# c: (r-c)c
-
-	# ....XXMAS.
-	# .SAMXMS...
-	# ...S..A...
-	# ..A.A.MS.X
-	# XMASAMX.MM
-	# X.....XA.A
-	# S.S.S.S.SS
-	# .A.A.A.A.A
-	# ..M.M.M.MM
-	# .X.X.XMASX
+#################
 
 if __name__ == "__main__":
 
-	input = """....XXMAS.
-.SAMXMS...
-...S..A...
-..A.A.MS.X
-XMASAMX.MM
-X.....XA.A
-S.S.S.S.SS
-.A.A.A.A.A
-..M.M.M.MM
-.X.X.XMASX"""
+	input = """..."""
 
 	print(f'XMAS count: {get_xmas_count(input)}')
