@@ -1,5 +1,4 @@
 from itertools import chain
-from typing import List, Tuple
 
 
 ##############
@@ -7,22 +6,11 @@ from typing import List, Tuple
 ##############
 
 def line_count(line: str) -> int:
-  count = 0
-  for i in range(len(line) - 3):
-    if 'XMAS' in (line[i:i+4], line[i:i+4][::-1]):
-      count += 1
-  return count
+  return sum('XMAS' in (line[i:i+4], line[i:i+4][::-1]) for i in range(len(line)-3))
 
-def get_diagonals(rows: List[str]) -> List[str]:
-  levels: Tuple[str, ...] = tuple()
-  for row in range(len(rows)*2):
-    level: List[str] = []
-    for c in range(row + 1):
-      if row-c < len(rows) and c < len(rows[row-c]):
-        level += rows[row-c][c]
-    levels += (''.join(level),)
-
-  return list(levels)
+def get_diagonals(rows: list[str]) -> list[str]:
+  return list(chain.from_iterable((''.join(rows[row-c][c] for c in range(row+1)
+      if row-c < len(rows) and c < len(rows[row-c])),) for row in range(len(rows)*2)))
 
 def get_xmas_count(input: str) -> int:
   rows = input.split('\n')
@@ -35,10 +23,31 @@ def get_xmas_count(input: str) -> int:
   return sum(line_count(line)
       for line in chain(rows, columns, diagonals_ltr_up, diagonals_ltr_down))
 
-#################
+##############
+### Part 2 ###
+##############
+
+def has_masmas(square: list[str]) -> bool:
+  l1, l2, l3 = square
+
+  return l2[1] == 'A' and any((
+      l1[0] == l1[2] == 'M' and l3[0] == l3[2] == 'S',
+      l1[0] == l1[2] == 'S' and l3[0] == l3[2] == 'M',
+      l1[0] == l3[0] == 'M' and l1[2] == l3[2] == 'S',
+      l1[0] == l3[0] == 'S' and l1[2] == l3[2] == 'M'))
+
+def get_masmas_count(input: str) -> int:
+  rows = input.split('\n')
+  squares = tuple([rows[i][j:j+3], rows[i+1][j:j+3], rows[i+2][j:j+3]]
+      for i in range(len(rows)-2) for j in range(len(rows[0])-2))
+
+  return len(tuple(filter(lambda s: has_masmas(s), squares)))
+
+###############
 
 if __name__ == "__main__":
 
   input = """..."""
 
   print(f'XMAS count: {get_xmas_count(input)}')
+  print(f'MASMAS count: {get_masmas_count(input)}')
