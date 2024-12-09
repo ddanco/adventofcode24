@@ -19,7 +19,7 @@ def get_rules_and_updatess(input: str) -> Tuple[Rules, Updates]:
 ### Part 1 ###
 ##############
 
-def get_legal_sum(input: str):
+def get_legal_updates(input: str) -> Tuple[Updates, ...]:
   rules, updatess = get_rules_and_updatess(input)
   rules_dict: Dict[int, Tuple[int, ...]] = {}
   for rule in rules:
@@ -31,6 +31,25 @@ def get_legal_sum(input: str):
           for i, update in enumerate(updates))
 
   legal_updates = tuple(filter(update_legal, updatess))
+
+def get_legal_sum(input: str) -> int:
+  legal_updates = get_legal_updates(input)
+  return sum(update[(len(update)-1)//2] for update in legal_updates)
+
+##############
+### Part 2 ###
+##############
+
+def get_ordering(input: str) -> list[int]:
+  return ... # TODO
+
+def get_updated_sum(input: str) -> int:
+  rules, updatess = get_rules_and_updatess(input)
+  legal_updates = get_legal_updates(input)
+  illegal_updates = tuple(filter(lambda u: u not in legal_updates, updatess))
+  ordering = get_ordering(input)
+  reordered_updates = tuple(sorted(update,
+      key=lambda u: ordering.get_index(u)) for update in illegal_updates)
   return sum(update[(len(update)-1)//2] for update in legal_updates)
 
 ##############
