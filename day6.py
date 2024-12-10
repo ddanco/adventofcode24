@@ -6,38 +6,6 @@ from typing import Tuple
 ### Part 1 ###
 ##############
 
-## Maximum recursion depth exceeded for full input :(
-# def fill_map_rec(grid: list[str], loc: Tuple[int, int]) -> list[str]:
-#   guard = grid[loc[0]][loc[1]]
-#   if loc[0] == 0 and guard == '^' or \
-#       loc[0] == len(grid) - 1 and guard == 'v' or \
-#       loc[1] == 0 and guard == '<' or \
-#       loc[1] == len(grid[0]) - 1 and guard == '>':
-#     grid[loc[0]] = grid[loc[0]].replace(guard, 'X')
-#     return grid
-
-#   next_guard_pos = {
-#       '^': (loc[0]-1, loc[1]),
-#       'v': (loc[0]+1, loc[1]),
-#       '>': (loc[0], loc[1]+1),
-#       '<': (loc[0], loc[1]-1)}
-#   next_pos = next_guard_pos[guard]
-
-#   rotations = {
-#       '^': '>',
-#       'v': '<',
-#       '>': 'v',
-#       '<': '^'}
-
-#   if grid[next_pos[0]][next_pos[1]] == '#':
-#     grid[loc[0]] = grid[loc[0]].replace(guard, rotations[guard])
-#     return fill_map_rec(grid, loc)
-
-#   grid[loc[0]] = grid[loc[0]][:loc[1]] + 'X' + grid[loc[0]][loc[1]+1:]
-#   grid[next_pos[0]] = grid[next_pos[0]][:next_pos[1]] + guard + grid[next_pos[0]][next_pos[1]+1:]
-#   return fill_map_rec(grid, next_pos)
-
-
 def fill_map_iter(grid: list[str]) -> list[str]:
 
   def complete(loc, guard) -> bool:
