@@ -40,14 +40,14 @@ def get_legal_sum(input: str) -> int:
 ### Part 2 ###
 ##############
 
-def get_ordering(input: str) -> list[int]:
-  return ... # TODO
+def get_ordering(input: Rules) -> Tuple[int]:
+  return ...
 
 def get_updated_sum(input: str) -> int:
   rules, updatess = get_rules_and_updatess(input)
   legal_updates = get_legal_updates(input)
   illegal_updates = tuple(filter(lambda u: u not in legal_updates, updatess))
-  ordering = get_ordering(input)
+  ordering = get_ordering(rules)
   reordered_updates = tuple(sorted(update,
       key=lambda u: ordering.get_index(u)) for update in illegal_updates)
   return sum(update[(len(update)-1)//2] for update in legal_updates)
@@ -59,3 +59,4 @@ if __name__ == '__main__':
   input = '''...'''
 
   print(f'Sum of middle pages for legal updates: {get_legal_sum(input)}')
+  print(f'Sum of middle pages for reordered illegal updates {get_updated_sum(input)}')
