@@ -23,12 +23,13 @@ def move_file_blocks(blocks: str) -> str:
 
   return blocks
 
-def get_check_sum(s: str) -> int:
+def get_check_sum(i: str) -> int:
+  finalized_block_string = move_file_blocks(convert_input_to_blocks(input))
   return sum(i*int(c) for i, c in
-      enumerate(tuple(filter(lambda c: c.isdigit(), list(s)))))
+      enumerate(tuple(filter(lambda c: c.isdigit(), list(finalized_block_string)))))
 
 
 if __name__ == '__main__':
 
   input = '''...'''
-  print(get_check_sum(move_file_blocks(convert_input_to_blocks(input))))
+  print(f'Check sum: {get_check_sum(input)}')
